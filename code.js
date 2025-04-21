@@ -71,6 +71,8 @@ async function processSection(section) {
   // Apply status if one was detected
   if (status) {
     await applyStatus(section, status);
+  }else {
+    await applyStatus(section, 'DEFAULT'); // デフォルトのステータスを適用
   }
 }
 
@@ -115,12 +117,13 @@ async function applyStatus(section, status) {
 function applyBackgroundColor(section, status) {
   const color = STATUS_COLORS[status] || STATUS_COLORS.DEFAULT; // 該当しない場合はDEFAULTを使用
   if (!color) return;
-  
+
   section.fills = [{
     type: 'SOLID',
-    color: color
+    color: color,
   }];
 }
+
 
 // Add the Sui-chan character in the appropriate state
 async function addSuiChanCharacter(section, status) {
