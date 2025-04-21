@@ -1,9 +1,9 @@
-// Status detection constants
+// 既存のキーワードに新しいキーワードを追加
 const STATUS_KEYWORDS = {
-  FIX: "fix",
-  WIP: "wip",
-  REJECTED: "ぼつ",
-  IGNORE: "見なくていい"
+  FIX: ["fix", "確定"], // 新しいキーワード "done" を追加
+  WIP: ["wip", "作業中", "progress"], // 新しいキーワード "progress" を追加
+  REJECTED: ["ぼつ", "ボツ", "やめました"], // 新しいキーワード "discarded" を追加
+  IGNORE: ["見なくていい", "ignore", "アーカイブ"] // 新しいキーワード "skip" を追加
 };
 
 const STATUS_COLORS = {
@@ -73,17 +73,16 @@ async function processSection(section) {
   }
 }
 
-// Detect the status from a section name
+// detectStatus関数を修正して複数のキーワードを検出
 function detectStatus(sectionName) {
-  if (sectionName.includes(STATUS_KEYWORDS.FIX)) {
-    return 'FIX';
-  } else if (sectionName.includes(STATUS_KEYWORDS.WIP)) {
-    return 'WIP';
-  } else if (sectionName.includes(STATUS_KEYWORDS.REJECTED)) {
-    return 'REJECTED';
-  } else if (sectionName.includes(STATUS_KEYWORDS.IGNORE)) {
-    return 'IGNORE';
+  const lowerCaseName = sectionName.toLowerCase();
+
+  for (const [status, keywords] of Object.entries(STATUS_KEYWORDS)) {
+    if (keywords.some(keyword => lowerCaseName.includes(keyword))) {
+      return status;
+    }
   }
+
   return null;
 }
 
