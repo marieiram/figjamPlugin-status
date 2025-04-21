@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      margin: 0;
+      padding: 10px;
+      color: #333;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    h1 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 6px;
+    }
+    
+    .color-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+    
+    .status-name {
+      font-weight: 500;
+    }
+    
+    .status-keyword {
+      font-family: monospace;
+      background-color: #F5F5F5;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    
+    .footer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Status Management Plugin</h1>
+    
+    <div class="status-list">
+      <div class="status-item" style="background-color: rgba(166, 233, 179, 0.2);">
+        <div class="color-dot" style="background-color: #A6E9B3;"></div>
+        <span class="status-name">Fix</span>
+        <span class="status-keyword">fix</span>
+      </div>
+      
+      <div class="status-item" style="background-color: rgba(255, 222, 130, 0.2);">
+        <div class="color-dot" style="background-color: #FFDE82;"></div>
+        <span class="status-name">Work in Progress</span>
+        <span class="status-keyword">wip</span>
+      </div>
+      
+      <div class="status-item" style="background-color: rgba(255, 175, 175, 0.2);">
+        <div class="color-dot" style="background-color: #FFAFAF;"></div>
+        <span class="status-name">Rejected</span>
+        <span class="status-keyword">ぼつ</span>
+      </div>
+      
+      <div class="status-item" style="background-color: rgba(224, 224, 224, 0.2);">
+        <div class="color-dot" style="background-color: #E0E0E0;"></div>
+        <span class="status-name">Can be ignored</span>
+        <span class="status-keyword">見なくていい</span>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>Add keywords to your section titles to apply status colors and characters automatically.</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Send messages to the plugin
+      parent.postMessage({ pluginMessage: { type: 'ready' } }, '*');
+    });
+  </script>
+</body>
+</html>
