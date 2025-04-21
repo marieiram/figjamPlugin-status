@@ -10,7 +10,8 @@ const STATUS_COLORS = {
   FIX: { r: 166/255, g: 233/255, b: 179/255 },
   WIP: { r: 255/255, g: 222/255, b: 130/255 },
   REJECTED: { r: 255/255, g: 175/255, b: 175/255 },
-  IGNORE: { r: 224/255, g: 224/255, b: 224/255 }
+  IGNORE: { r: 224/255, g: 224/255, b: 224/255 },
+  DEFAULT: { r: 248/255, g: 248/255, b: 248/255 }
 };
 
 // Main function to run the plugin
@@ -112,7 +113,7 @@ async function applyStatus(section, status) {
 
 // Apply the appropriate background color
 function applyBackgroundColor(section, status) {
-  const color = STATUS_COLORS[status];
+  const color = STATUS_COLORS[status] || STATUS_COLORS.DEFAULT; // 該当しない場合はDEFAULTを使用
   if (!color) return;
   
   section.fills = [{
