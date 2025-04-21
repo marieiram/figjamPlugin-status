@@ -132,12 +132,12 @@ async function addSuiChanCharacter(section, status) {
   
   if (!characterData) return;
   
-  // Calculate position (bottom-right corner)
+  // Calculate position (near the top-right corner of the section)
   const sectionWidth = section.width;
   const sectionHeight = section.height;
   
-  // Make character size approximately 20% of the section size
-  const charSize = Math.min(sectionWidth, sectionHeight) * 0.2;
+  // Make character size approximately 10% of the section size
+  const charSize = Math.min(sectionWidth, sectionHeight) * 0.1;
   
   // Create node for character
   const characterNode = figma.createNodeFromSvg(characterData);
@@ -147,13 +147,13 @@ async function addSuiChanCharacter(section, status) {
   const scale = charSize / Math.max(characterNode.width, characterNode.height);
   characterNode.resize(characterNode.width * scale, characterNode.height * scale);
   
-  // Position in bottom-right corner with a small margin
+  // Position near the top-right corner with a small margin
   const margin = 8;
-  characterNode.x = section.x + sectionWidth - characterNode.width - margin;
-  characterNode.y = section.y + sectionHeight - characterNode.height - margin;
+  characterNode.x = section.x + sectionWidth + margin; // セクションの右側に配置
+  characterNode.y = section.y + margin; // セクションの上部に配置
   
-  // Add to section
-  section.appendChild(characterNode);
+  // Add to section's parent (not inside the section to avoid clipping)
+  section.parent.appendChild(characterNode);
 }
 
 // Get the SVG data for Sui-chan in the appropriate state
