@@ -40,22 +40,44 @@ function handleDocumentChange(event) {
   const nodeChanges = event.documentChanges.filter(change => 
     change.type === 'PROPERTY_CHANGE' && 
     change.node.type === 'SECTION' && 
-    change.properties.some(prop => prop.property === 'name')
+    change.properties.some(prop => prop.property === 'name' || prop.property === 'x' || prop.property === 'y')
   );
-  
+
   for (const change of nodeChanges) {
-    processSection(change.node);
+    if (change.properties.some(prop => prop.property === 'x' || prop.property === 'y')) {
+      // Update character position if the section's position changes
+      updateCharacterPosition(change.node);
+    } else {
+      // Process section for other changes (e.g., name)
+      processSection(change.node);
+    }
   }
-  
+
   // Also handle newly created sections
   const nodeCreations = event.documentChanges.filter(change => 
     change.type === 'CREATE' && 
     change.node.type === 'SECTION'
   );
-  
+
   for (const change of nodeCreations) {
     processSection(change.node);
   }
+}
+
+function updateCharacterPosition(section) {
+  // Find the character node by traversing the parent
+  const characterNode = figma.currentPage.findOne(node => 
+    node.name === 'sui-chan-character' && node.parent === section.parent
+  );
+  if (!characterNode) return;
+
+  const sectionWidth = section.width;
+  const sectionHeight = section.height;
+  const margin = 8;
+
+  // Update character position to follow the section
+  characterNode.x = section.x + sectionWidth + margin; // セクションの右側に配置
+  characterNode.y = section.y + margin; // セクションの上部に配置
 }
 
 // Process a section to detect status and apply visual feedback
@@ -125,7 +147,6 @@ function applyBackgroundColor(section, status) {
 }
 
 
-// Add the Sui-chan character in the appropriate state
 async function addSuiChanCharacter(section, status) {
   // Determine which character to use based on status
   const characterData = await getSuiChanSvgData(status);
@@ -149,13 +170,12 @@ async function addSuiChanCharacter(section, status) {
   
   // Position near the top-right corner with a small margin
   const margin = 8;
-  characterNode.x = section.x + sectionWidth + margin; // セクションの右側に配置
-  characterNode.y = section.y + margin; // セクションの上部に配置
+  characterNode.x = sectionWidth - characterNode.width - margin; // セクション内の右上に配置
+  characterNode.y = margin; // セクション内の上部に配置
   
-  // Add to section's parent (not inside the section to avoid clipping)
-  section.parent.appendChild(characterNode);
+  // Add to section (inside the section to ensure it's part of the section)
+  section.appendChild(characterNode);
 }
-
 // Get the SVG data for Sui-chan in the appropriate state
 async function getSuiChanSvgData(status) {
   // Placeholder SVG data for characters
