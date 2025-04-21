@@ -14,7 +14,7 @@ const STATUS_COLORS = {
 };
 
 // Main function to run the plugin
-figma.showUI(__html__, { visible: false });
+figma.showUI(__html__, { visible: true});
 
 // Initialize the plugin
 function initializePlugin() {
@@ -170,8 +170,10 @@ async function getSuiChanSvgData(status) {
 initializePlugin();
 
 // Let the plugin continue to run
-figma.ui.onmessage = msg => {
+figma.ui.onmessage = async (msg) => {
   if (msg.type === 'cancel') {
     figma.closePlugin();
+  } else if (msg.type === 'check-sections') {
+    await checkAllSections(); // ボタンが押されたときに実行
   }
 };

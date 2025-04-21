@@ -57,7 +57,15 @@
 <body>
   <div class="container">
     <h1>Status Management Plugin</h1>
-    
+    <p>Click the button below to check all sections in the current page.</p>
+    <button id="check-sections-button">Check All Sections</button>
+    <script>
+      const button = document.getElementById('check-sections-button');
+      button.addEventListener('click', () => {
+        parent.postMessage({ pluginMessage: { type: 'check-sections' } }, '*');
+      });
+    </script>
+
     <div class="status-list">
       <div class="status-item" style="background-color: rgba(166, 233, 179, 0.2);">
         <div class="color-dot" style="background-color: #A6E9B3;"></div>
